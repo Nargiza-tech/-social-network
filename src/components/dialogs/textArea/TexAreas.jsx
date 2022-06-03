@@ -2,7 +2,7 @@ import React from "react";
 
 import classes from "../dialogs.module.css";
 
-const TextArea = (props) => {
+const TexAreas = (props) => {
     let newMessages = React.createRef();
 
     let addMessagesBtn = () =>{
@@ -26,4 +26,4 @@ const TextArea = (props) => {
     )
 }
 
-export default TextArea;
+export default TexAreas;

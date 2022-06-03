@@ -5,6 +5,9 @@
 }
 
 
+.container{
+    padding: 0 40px;
+}
 
 .selectedPage{
     font-weight: bold ;

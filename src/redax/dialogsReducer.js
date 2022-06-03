@@ -1,4 +1,4 @@
- const UPPDATEMESSAGEBODY = "UPDATE-NEW-MESSAGE-BODY";
+ // const UPPDATEMESSAGEBODY = "UPDATE-NEW-MESSAGE-BODY";
 const SENDMESSAGE = "SEND-MESSAGE";
 
 let initialState = {
@@ -10,7 +10,7 @@ let initialState = {
         {id: 5, message: 'Yo!'},
         {id: 6, message: 'Yo!'}
     ],
-        newMessageBody: "",
+        // newMessageBody: "",
         dialogs: [
         {id: 1, name: 'Nargiza'},
         {id: 2, name: 'Sveta'},
@@ -27,15 +27,15 @@ let initialState = {
      // stateCopy1.messages = [...state.messages]
 
 switch (action.type){
-    case UPPDATEMESSAGEBODY:
-      return {...state,
-          newMessageBody : action.body
-        };
+//     case UPPDATEMESSAGEBODY:
+//       return {...state,
+//           newMessageBody : action.body
+//         };
 
     case SENDMESSAGE:
-        let body = state.newMessageBody;
+        let body = action.newMessageBody;
         return {...state,
-            newMessageBody : ' ',
+            // newMessageBody : ' ',
             messages: [...state.messages, {id:7, message: body}]
 
         };
@@ -46,17 +46,18 @@ switch (action.type){
 
 }
 
-export const sendMessageCreator = () => (
+export const sendMessageCreator = (newMessageBody) => (
     {
-        type: SENDMESSAGE
+        type: SENDMESSAGE,
+        newMessageBody
     })
 
 
-export const updateNewMessageBodyCreator = (body) => (
-    {
-        type: UPPDATEMESSAGEBODY,
-        body: body
-    })
+// export const updateNewMessageBodyCreator = (body) => (
+//     {
+//         type: UPPDATEMESSAGEBODY,
+//         body: body
+//     })
 
 
 export default dialogsReducer;

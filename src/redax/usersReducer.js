@@ -1,3 +1,5 @@
+import {userApi} from "../api/Api";
+
 const FOLLOW = "FOLLOW";
 
 const UNFOLLOW = "UNFOLLOW";
@@ -14,9 +16,9 @@ const TOGGLE_IS_FETCHING = "TOGGLE_IS_FETCHING";
 
 let initialState = {
     users: [],
-    pageSize: 5,    //делим насколько будем показывать, тоесть будем показывать по 5 юзеров на каждой странице
+    pageSize: 10,    //делим насколько будем показывать, тоесть будем показывать по 5 юзеров на каждой странице
     totalUsersCount: 54,  //всего 20 юзеров в bll
-    currentPage: 4, // здесь запрашиваем страницу всегда будем запрашивать 1 страницу
+    currentPage: 1, // здесь запрашиваем страницу всегда будем запрашивать 1 страницу
     isFetching: true,
     followingInProgress: []
 };
@@ -58,10 +60,11 @@ const usersReducer = (state = initialState, action) => {
             return {...state, totalUsersCount: action.count}
 
         case TOGGLE_IS_FETCHING:
-            return {...state, isFetching: action.isFetching }
+            return {...state, isFetching: action.isFetching}
 
         case TOGGLE_IS_FOLLOWING_PROGRESS:
-            return {...state,
+            return {
+                ...state,
                 followingInProgress: action.isFetching ?
                     [...state.followingInProgress, action.userId]
                     : state.followingInProgress.filter(id => id != action.userId)
@@ -75,7 +78,7 @@ const usersReducer = (state = initialState, action) => {
 }
 
 
-export const follow = (userId) => (
+export const followSucces = (userId) => (
     {
         type: FOLLOW,
         userId
@@ -83,7 +86,7 @@ export const follow = (userId) => (
 
 //Убрали слово return и фигурные скобки{} у этих функции потомучто он в одном строке тоесть нет тела функции
 
-export const unfollow = (userId) => (
+export const unfollowSucces = (userId) => (
     {
         type: UNFOLLOW,
         userId
@@ -121,6 +124,57 @@ export const toggleFollowingInProgress = (isFetching, userId) => (
         isFetching,
         userId
     })
+
+
+//requestUsers dolgen byt
+export const getUsers = (page, pageSize) => {
+    return async (dispatch) => {
+        dispatch(toggleIsFetching(true))
+        dispatch(setCurrent(page));
+
+
+        let data = await userApi.getUsers(page, pageSize);
+        dispatch(toggleIsFetching(false))
+        dispatch(setUsers(data.items));
+        dispatch(setUsersTotal(data.totalCount));
+    }
+}
+
+
+
+
+
+export const follow = (userId) => {
+    return async (dispatch) => {
+
+        let actionCreator = followSucces;
+
+        dispatch(toggleFollowingInProgress(true, userId));
+        let response = await userApi.follow(userId)
+        if (response.data.resultCode == 0) {
+            dispatch(actionCreator(userId))
+        }
+        dispatch(toggleFollowingInProgress(false, userId));
+    }
+}
+
+export const unfollow = (userId) => {
+    return async (dispatch) => {
+
+        let apiMethod = userApi.unfollow.bind(userApi);
+
+        let actionCreator = unfollowSucces;
+
+
+        dispatch(toggleFollowingInProgress(true, userId));
+        let response = userApi.unfollow(userId)
+        if (response.data.resultCode == 0) {
+            dispatch(unfollowSucces(userId))
+        }
+        dispatch(toggleFollowingInProgress(false, userId));
+    }
+}
+
 
 export default usersReducer;
 

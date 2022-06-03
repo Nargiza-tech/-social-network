@@ -2,13 +2,14 @@ import React from 'react';
 import classes from './profile.module.css';
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
 import MyPostsContainer from "./MyPosts/MyPostsContainer";
+import {updateStatus} from "../../redax/profile-reducer";
 
 const Profile = (props) => {
 
     return (
         <div>
 
-            <ProfileInfo profile={props.profile}/>
+            <ProfileInfo profile={props.profile} status={props.status} updateStatus={props.updateStatus}/>
             <MyPostsContainer
                 // store={props.store}
 

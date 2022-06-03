@@ -19,14 +19,47 @@ export const userApi = {
         return instance.get(`users?page=${currentPage}&count=${pageSize}`,
         ).then(response => response.data)
 
+    },
+        follow(userId) {
+        return   instance.post(`follow/${userId}`)
+
+        },
+    unfollow(userId) {
+      return  instance.delete(`follow/${userId}`)
+    },
+  getProfile(userId){
+      console.warn('obsalete method. Please profileApi object')
+      return  ProfileApi.getProfile(userId);
+
     }
 }
 
 
-//
-// export const followApi = {
-//     getUsersFollow(){
-//         return instance.post(`follow/${u.id}`).then(response => response.data)
-//
-//     }
-// }
+
+
+export const ProfileApi = {
+    getProfile(userId){
+
+        return  instance.get("profile/" + userId);
+
+    },
+    getStatus(userId){
+        return  instance.get(`profile/status/` + userId);
+    },
+    updateStatus(status){
+    return  instance.put(`profile/status`, {status: status});
+}
+}
+
+
+export const authApi = {
+    me() {
+        return  instance.get(`auth/me`)
+    },
+    login(email, password, rememberMe = false) {
+        return  instance.post(`auth/login`, {email, password, rememberMe});
+    },
+    logout() {
+        return  instance.delete(`auth/login`);
+    }
+}
